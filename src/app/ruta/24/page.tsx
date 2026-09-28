@@ -66,45 +66,68 @@ export default function PaginaRuta() {
     }
   }
 
+  async function guardarReporte(lat: number, lng: number, notaUbicacion?: string) {
+    const resp = await fetch("/api/excepciones/reportar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        rutaId: RUTA_ID,
+        paradaId: paradaId || undefined,
+        descripcion,
+        alias,
+        lat,
+        lng,
+      }),
+    });
+    const datos = await resp.json();
+    setEnviando(false);
+    if (resp.ok) {
+      setMensaje(
+        notaUbicacion
+          ? `Reporte guardado como "sin verificar" (ubicado cerca de ${notaUbicacion}). Gracias por avisar.`
+          : 'Reporte guardado como "sin verificar". Gracias por avisar.'
+      );
+      setDescripcion("");
+      setMostrarForma(false);
+      cargarExcepciones();
+    } else {
+      setMensaje(datos.error ?? "No se pudo guardar tu reporte.");
+    }
+  }
+
   async function enviarReporte(e: React.FormEvent) {
     e.preventDefault();
     setMensaje(null);
+    setEnviando(true);
+
+    // Si el GPS falla o la persona no dio permiso, no la dejamos varada:
+    // usamos la parada que ya eligió como ubicación aproximada. Si tampoco
+    // eligió parada, le pedimos elegir una en vez de bloquear el reporte.
+    const usarParadaComoRespaldo = () => {
+      const parada = PARADAS_FIJAS.find((p) => p.id === paradaId);
+      if (parada) {
+        void guardarReporte(parada.lat, parada.lng, parada.nombre);
+      } else {
+        setEnviando(false);
+        setMensaje(
+          "No pudimos usar tu ubicación exacta. Elige la parada más cercana en el menú de arriba y envía otra vez."
+        );
+      }
+    };
 
     if (!navigator.geolocation) {
-      setMensaje("Tu navegador no puede compartir tu ubicación. No se puede reportar sin ella.");
+      usarParadaComoRespaldo();
       return;
     }
 
-    setEnviando(true);
     navigator.geolocation.getCurrentPosition(
-      async (posicion) => {
-        const resp = await fetch("/api/excepciones/reportar", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            rutaId: RUTA_ID,
-            paradaId: paradaId || undefined,
-            descripcion,
-            alias,
-            lat: posicion.coords.latitude,
-            lng: posicion.coords.longitude,
-          }),
-        });
-        const datos = await resp.json();
-        setEnviando(false);
-        if (resp.ok) {
-          setMensaje("Reporte guardado como \"sin verificar\". Gracias por avisar.");
-          setDescripcion("");
-          setMostrarForma(false);
-          cargarExcepciones();
-        } else {
-          setMensaje(datos.error ?? "No se pudo guardar tu reporte.");
-        }
+      (posicion) => {
+        void guardarReporte(posicion.coords.latitude, posicion.coords.longitude);
       },
       () => {
-        setEnviando(false);
-        setMensaje("Necesitamos tu ubicación para guardar el reporte en el lugar correcto.");
-      }
+        usarParadaComoRespaldo();
+      },
+      { timeout: 8000 }
     );
   }
 
@@ -229,8 +252,9 @@ export default function PaginaRuta() {
               />
             </div>
             <p className="text-[11px] text-slate-500">
-              Vamos a usar tu ubicación actual solo para ubicar este reporte en el mapa. Ningún
-              reporte identifica a un chofer.
+              Vamos a usar tu ubicación actual solo para ubicar este reporte en el mapa. Si tu
+              teléfono no puede compartirla, usamos la parada que elijas arriba. Ningún reporte
+              identifica a un chofer.
             </p>
             <div className="flex gap-2">
               <button
