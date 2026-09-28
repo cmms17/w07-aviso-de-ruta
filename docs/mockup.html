@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Mockup Aviso de Ruta</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: #eef1f4; }
+  .phone {
+    width: 390px; margin: 24px auto; background: #ffffff; border-radius: 28px;
+    overflow: hidden; box-shadow: 0 20px 50px rgba(20,30,50,0.18);
+    border: 8px solid #14161c;
+  }
+  .status-bar { height: 22px; background: #14161c; }
+  .header {
+    background: linear-gradient(135deg, #1f4e7a, #163a5c); color: white;
+    padding: 16px 18px 14px;
+  }
+  .header .eyebrow { font-size: 10.5px; letter-spacing: 0.6px; opacity: 0.75; text-transform: uppercase; }
+  .header h1 { font-size: 18px; margin-top: 3px; font-weight: 700; }
+  .header .sub { font-size: 11.5px; opacity: 0.85; margin-top: 3px; }
+  .map {
+    height: 168px; margin: 14px 16px 0; border-radius: 14px;
+    background: linear-gradient(180deg, #dbe7d8 0%, #cfe0ce 100%);
+    position: relative; overflow: hidden; border: 1px solid #c3d3c1;
+  }
+  .road {
+    position: absolute; background: #ffffff; opacity: 0.9;
+  }
+  .road.h1 { top: 40%; left: 0; right: 0; height: 8px; }
+  .road.h2 { top: 72%; left: 10%; right: 0; height: 6px; transform: rotate(-4deg); }
+  .stop {
+    position: absolute; width: 11px; height: 11px; background: #1f4e7a; border: 2px solid white;
+    border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .stop.warn { background: #b6871f; }
+  .stop-label {
+    position: absolute; font-size: 8px; color: #33403a; font-weight: 600; background: rgba(255,255,255,0.85);
+    padding: 1px 4px; border-radius: 4px;
+  }
+  .section-title {
+    font-size: 12.5px; font-weight: 700; color: #1a2530; margin: 16px 16px 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .section-title span.count { font-weight: 600; color: #7a8794; font-size: 11px; }
+  .card {
+    margin: 0 16px 10px; padding: 11px 12px; border-radius: 12px; border: 1px solid #e3e7ec;
+    background: #fbfcfd;
+  }
+  .card .top-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .card .desc { font-size: 12.8px; color: #1e2a35; line-height: 1.35; font-weight: 600; }
+  .badge {
+    font-size: 9px; font-weight: 700; padding: 3px 7px; border-radius: 20px; white-space: nowrap;
+  }
+  .badge.unverified { background: #fdf1d8; color: #97650f; }
+  .badge.verified { background: #dff3e6; color: #1c7a44; }
+  .card .meta { font-size: 10.3px; color: #7a8794; margin-top: 5px; }
+  .card .expiry { font-size: 9.6px; color: #a24b3a; margin-top: 3px; font-weight: 600; }
+  .report-btn {
+    margin: 6px 16px 16px; padding: 12px; text-align: center; border-radius: 12px;
+    background: #1f4e7a; color: white; font-size: 13px; font-weight: 700;
+  }
+  .footnote {
+    margin: 0 16px 16px; font-size: 9px; color: #9aa4ad; text-align: center; line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="status-bar"></div>
+    <div class="header">
+      <div class="eyebrow">Aviso de Ruta · sin cuenta</div>
+      <h1>Ruta 24 — Ecatepec → La Presa</h1>
+      <div class="sub">Paradas fijas + excepciones de hoy</div>
+    </div>
+
+    <div class="map">
+      <div class="road h1"></div>
+      <div class="road h2"></div>
+      <div class="stop" style="top:35%; left:12%;"></div>
+      <div class="stop-label" style="top:24%; left:8%;">Terminal</div>
+      <div class="stop" style="top:35%; left:45%;"></div>
+      <div class="stop-label" style="top:24%; left:41%;">Mercado</div>
+      <div class="stop warn" style="top:35%; left:74%;"></div>
+      <div class="stop-label" style="top:24%; left:66%;">Av. Central</div>
+      <div class="stop" style="top:68%; left:60%;"></div>
+      <div class="stop-label" style="top:76%; left:53%;">La Presa</div>
+    </div>
+
+    <div class="section-title">Excepciones activas hoy <span class="count">2</span></div>
+
+    <div class="card">
+      <div class="top-row">
+        <div class="desc">Parada Av. Central cerrada por obra</div>
+        <div class="badge unverified">SIN VERIFICAR</div>
+      </div>
+      <div class="meta">Reportado hace 12 min · 1 de 2 confirmaciones</div>
+      <div class="expiry">Caduca en 23h 48min si nadie la confirma</div>
+    </div>
+
+    <div class="card">
+      <div class="top-row">
+        <div class="desc">Combi desvía por Mercado, no entra a Terminal después de las 8pm</div>
+        <div class="badge verified">VERIFICADO POR LA COMUNIDAD</div>
+      </div>
+      <div class="meta">Confirmado por 3 personas · hace 2 horas</div>
+      <div class="expiry">Caduca en 22h 05min</div>
+    </div>
+
+    <div class="report-btn">+ Reportar una excepción</div>
+    <div class="footnote">Ningún reporte identifica a un chofer. Un coordinador humano revisa lo que la comunidad no logra verificar sola.</div>
+  </div>
+</body>
+</html>

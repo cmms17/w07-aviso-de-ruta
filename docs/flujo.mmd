@@ -1,0 +1,13 @@
+flowchart TD
+    A[Pasajera entra a /ruta/24 sin cuenta] --> B[Ve paradas fijas sobre el mapa\ny excepciones activas de hoy]
+    B --> C{Hay una excepcion\nque afecta su parada?}
+    C -->|Si| D[Decide una parada o\nhorario alterno antes de salir]
+    C -->|No| E[Sale con el plan normal]
+    B --> F[Puede reportar una\nexcepcion nueva]
+    F --> G[Captura ubicacion GPS\ny descripcion corta]
+    G --> H[Logica de verificacion:\n2+ reportes independientes?]
+    H -->|Si| I[Etiquetado: verificado\npor la comunidad]
+    H -->|No| J[Etiquetado: sin verificar,\nva a cola del coordinador]
+    J --> K[Coordinador revisa,\nverifica o retira]
+    I --> L[Expira solo a las 24h\nsi nadie lo renueva]
+    K --> L

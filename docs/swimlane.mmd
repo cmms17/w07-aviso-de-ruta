@@ -1,0 +1,25 @@
+flowchart TD
+    subgraph PAS[Pasajera / reportante]
+        p1[Abre /ruta/24\nsin cuenta]
+        p2[Ve excepciones activas\nantes de salir]
+        p3[Reporta una excepcion\nnueva si hace falta]
+    end
+    subgraph SIS[Sistema]
+        s1[Captura GPS y hora\ndel reporte]
+        s2[Cuenta confirmaciones\nindependientes]
+        s3[Marca estado: sin verificar\no verificado por comunidad]
+        s4[Expira el reporte\na las 24h]
+    end
+    subgraph COO[Coordinador de ruta]
+        c1[Inicia sesion\nSupabase Auth]
+        c2[Revisa cola de\nreportes sin verificar]
+        c3[Verifica, corrige\no retira un reporte]
+        c4[Nunca ve identidad\nde chofer - no existe el campo]
+    end
+
+    p1 --> p2 --> p3 --> s1
+    s1 --> s2 --> s3
+    s3 --> p2
+    s3 --> c2
+    c1 --> c2 --> c3 --> s3
+    s3 --> s4
